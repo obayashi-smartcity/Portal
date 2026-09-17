@@ -478,7 +478,7 @@ body::after{
         <div class="summary">
             <span class="badge primary" id="count-badge"></span>
             <span class="badge active" id="active-badge"></span>
-            <button class="theme-toggle" id="theme-toggle" title="テーマ切り替え">🌙</button>
+            <button class="theme-toggle" id="theme-toggle" title="テーマ切り替え">Dark</button>
         </div>
     </div>
 
@@ -492,6 +492,26 @@ body::after{
    プロダクト管理: ここに追記するだけでカードが増えます
    ========================================================== */
 const products = [
+    {
+        name:"DROP. Tracker for Toyama",
+        category:"Dashboard",
+        desc:"DROPのKPIモニタリング用（富山）",
+        latest:"Ver 1.0",
+        latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama1.0/",
+        archives:[
+            {ver:"Ver 1.0", url:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama1.0/"}
+        ]
+    },
+    {
+        name:"GrAIny for Toyama",
+        category:"Application",
+        desc:"街頭写真ロガー（富山）",
+        latest:"Ver 1.0",
+        latestUrl:"https://obayashi-smartcity.github.io/GrAInY_Toyama/",
+        archives:[
+            {ver:"Ver 1.0", url:"https://obayashi-smartcity.github.io/GrAInY_Toyama/"}
+        ]
+    },
     {
         name:"AREA DASHBOARD",
         category:"Dashboard",
@@ -646,7 +666,7 @@ function saveTheme(theme){
 
 function setTheme(theme){
     html.setAttribute("data-theme", theme);
-    toggle.textContent = theme === "dark" ? "🌙" : "☀️";
+    toggle.textContent = theme === "dark" ? "DARK MODE" : "LIGHT MODE";
 }
 
 // 保存済みテーマを復元（初期値はダーク）
