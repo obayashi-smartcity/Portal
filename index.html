@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="light">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,36 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ==========================================================
-   TOKENS  ―  Dark (default)
-   ========================================================== */
-:root,
-[data-theme="dark"]{
-    --primary:#3563E9;
-    --primary-light:#6488FF;
-    --primary-soft:#8AA6FF;
-    --success:#34D399;
-    --bg:#080B14;
-    --bg-2:#0C1120;
-    --card:rgba(255,255,255,.035);
-    --card-hover:rgba(255,255,255,.06);
-    --text:#F4F7FC;
-    --text-dim:#C6D0E0;
-    --muted:#8592A8;
-    --border:rgba(255,255,255,.09);
-    --border-soft:rgba(255,255,255,.05);
-    --chip:rgba(255,255,255,.035);
-    --hairline:rgba(255,255,255,.08);
-    /* soft ambient gradients */
-    --glow1:rgba(53,99,233,.28);
-    --glow2:rgba(100,136,255,.16);
-    --glow3:rgba(52,211,153,.10);
-    --sheen:rgba(255,255,255,.06);
-    --shadow:0 40px 90px -30px rgba(0,0,0,.7);
-}
-/* ==========================================================
    TOKENS  ―  Light
    ========================================================== */
-[data-theme="light"]{
+:root{
     --primary:#2C55D4;
     --primary-light:#4E76F5;
     --primary-soft:#7C97F7;
@@ -127,7 +100,7 @@ body::after{
     flex-wrap:wrap;
     gap:32px;
     padding-bottom:44px;
-    margin-bottom:72px;
+    margin-bottom:40px;
     border-bottom:1px solid var(--hairline);
     position:relative;
 }
@@ -161,9 +134,6 @@ body::after{
     width:auto;
     display:block;
 }
-.logo img.logo-dark{ display:none; }
-[data-theme="dark"] .logo img.logo-light{ display:none; }
-[data-theme="dark"] .logo img.logo-dark{ display:block; }
 
 .title h1{
     font-size:clamp(30px, 4.4vw, 52px);
@@ -222,26 +192,68 @@ body::after{
     0%,100%{ box-shadow:0 0 0 3px rgba(52,211,153,.16); }
     50%{ box-shadow:0 0 0 6px rgba(52,211,153,.05); }
 }
-/* ---------- Theme toggle ---------- */
-.theme-toggle{
-    width:46px;
-    height:46px;
-    border-radius:50%;
-    border:1px solid var(--border);
+/* ==========================================================
+   CATEGORY TABS
+   ========================================================== */
+.tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    width:fit-content;
+    max-width:100%;
+    padding:6px;
+    margin-bottom:44px;
     background:var(--card);
-    color:var(--text);
-    font-size:17px;
-    cursor:pointer;
-    display:grid;
-    place-items:center;
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
-    transition:transform .3s cubic-bezier(.2,.8,.2,1), background .3s, border-color .3s, box-shadow .3s;
+    border:1px solid var(--border);
+    border-radius:999px;
 }
-.theme-toggle:hover{
-    transform:translateY(-2px) rotate(-12deg);
-    border-color:var(--primary-light);
-    box-shadow:0 10px 26px -8px var(--glow1);
+.tab{
+    appearance:none;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.16em;
+    color:var(--muted);
+    padding:11px 20px;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    transition:color .25s, background .25s, box-shadow .25s;
+}
+.tab:hover{ color:var(--text); background:var(--chip); }
+.tab .count{
+    min-width:22px;
+    padding:2px 7px;
+    border-radius:999px;
+    background:var(--chip);
+    color:var(--muted);
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:.04em;
+    text-align:center;
+    transition:background .25s, color .25s;
+}
+.tab.is-active{
+    color:#fff;
+    background:linear-gradient(135deg,var(--primary),var(--primary-light));
+    box-shadow:0 10px 24px -10px rgba(53,99,233,.6);
+}
+.tab.is-active .count{ background:rgba(255,255,255,.22); color:#fff; }
+.tab:focus-visible{ outline:2px solid var(--primary-light); outline-offset:2px; }
+
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    color:var(--muted);
+    padding:72px 0;
+    font-size:14px;
+    letter-spacing:.06em;
 }
 
 /* ==========================================================
@@ -269,6 +281,11 @@ body::after{
     overflow:hidden;
     isolation:isolate;
     transition:transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s ease, background .4s ease, border-color .4s ease;
+    animation:cardIn .45s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes cardIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:none; }
 }
 /* soft radial sheen bleeding from top-right (curve) */
 .card::after{
@@ -454,7 +471,9 @@ body::after{
    ========================================================== */
 @media (max-width:640px){
     .container{ padding:64px 22px 56px; }
-    .header{ margin-bottom:48px; align-items:flex-start; }
+    .header{ margin-bottom:28px; align-items:flex-start; }
+    .tabs{ border-radius:20px; margin-bottom:32px; }
+    .tab{ padding:10px 14px; letter-spacing:.12em; }
     .logo{ padding-right:16px; }
     .logo img{ height:38px; }
     .brand{ gap:16px; }
@@ -467,8 +486,7 @@ body::after{
     <div class="header">
         <div class="brand">
             <div class="logo">
-                <img class="logo-light" src="04_obayashi_c.png" alt="OBAYASHI">
-                <img class="logo-dark" src="04_obayashi_o.png" alt="OBAYASHI">
+                <img src="04_obayashi_c.png" alt="OBAYASHI">
             </div>
             <div class="title">
                 <h1>APPLICATION PORTAL</h1>
@@ -478,11 +496,12 @@ body::after{
         <div class="summary">
             <span class="badge primary" id="count-badge"></span>
             <span class="badge active" id="active-badge"></span>
-            <button class="theme-toggle" id="theme-toggle" title="テーマ切り替え">Dark</button>
         </div>
     </div>
 
-    <div class="product-grid" id="grid"></div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="カテゴリ"></nav>
+
+    <div class="product-grid" id="grid" role="tabpanel"></div>
 
     <div class="footer">Application Portal</div>
 </div>
@@ -490,11 +509,15 @@ body::after{
 <script>
 /* ==========================================================
    プロダクト管理: ここに追記するだけでカードが増えます
+   tab : 表示するタブ（"DROP" / "SHOP" / "DASHBOARD" / "ADMIN"）
+         複数タブに出す場合は ["DROP","DASHBOARD"] のように配列で指定
+         空文字 "" の場合は ALL タブにのみ表示
    ========================================================== */
 const products = [
     {
         name:"DROP COACH",
         category:"application",
+        tab:"DROP",
         desc:"DROP投稿支援ツール",
         latest:"Ver *.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Shinagawa3.0/drop_coach_chat.html",
@@ -505,6 +528,7 @@ const products = [
     {
         name:"Lottery System",
         category:"application",
+        tab:"DROP",
         desc:"国立国際美術館　抽選システム",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Lottery/",
@@ -515,6 +539,7 @@ const products = [
     {
         name:"LP for SHOP",
         category:"Website",
+        tab:"SHOP",
         desc:"イベント用LP EmpoweringWOMEN",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/SHOP_event_site/",
@@ -525,6 +550,7 @@ const products = [
     {
         name:"ADPF GanttChart",
         category:"Application",
+        tab:"ADMIN",
         desc:"工程管理ツール",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/ADPF_Gantt/",
@@ -535,6 +561,7 @@ const products = [
     {
         name:"DROP. Tracker for Nakanoshima East",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPのKPIモニタリング用（中之島EASTよりみちPROJECT 2026）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_NakaEast1.0/",
@@ -545,6 +572,7 @@ const products = [
     {
         name:"Bot for SHOP",
         category:"Application",
+        tab:"SHOP",
         desc:"みんまちSHOPお問合せBot",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/SHOP_Bot/",
@@ -555,6 +583,7 @@ const products = [
     {
         name:"DROP. Graph for Ikefes",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPグラフネットワーク（イケフェス2026）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Ikefes1.0/drop_graph.html",
@@ -565,6 +594,7 @@ const products = [
     {
         name:"DROP. Coach for Ikefes",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROP投稿改善Agent（イケフェス2026）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Ikefes1.0/drop_coach.html",
@@ -575,6 +605,7 @@ const products = [
     {
         name:"DROP. Tracker for Ikefes",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPのKPIモニタリング用（イケフェス2026）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Ikefes1.0/",
@@ -585,6 +616,7 @@ const products = [
     {
         name:"DROP. AwardList for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPの景品付与対象投稿の確認用（富山）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama1.0/drop_post_map_list_award.html",
@@ -595,6 +627,7 @@ const products = [
         {
         name:"DROP. Labeler for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPのエリアラベル付与用（富山）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama1.0/drop_area_labeler.html",
@@ -605,6 +638,7 @@ const products = [
         {
         name:"DROP. Checker for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPの「表示スポット名」分布確認用（富山）",
         latest:"Ver 3.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama3.0/spot_map_drop.html",
@@ -615,6 +649,7 @@ const products = [
     {
         name:"DROP. INSIGHT for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPの詳細分析用（富山 フィルタ分析）",
         latest:"Ver 4.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama4.0/",
@@ -626,6 +661,7 @@ const products = [
    {
         name:"DROP. INSIGHT for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPの詳細分析用（富山 フィルタ分析_gpt4_gpt6比較）",
         latest:"Ver 4.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama4.0/index_gpt4_gpt6.html",
@@ -635,6 +671,7 @@ const products = [
     },   {
         name:"DROP. INSIGHT for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPの詳細分析用（富山 定住非定住比較）",
         latest:"Ver 2.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama2.0/",
@@ -645,6 +682,7 @@ const products = [
     {
         name:"DROP. Tracker for Toyama",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROPのKPIモニタリング用（富山）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/DROP_Dashboard_Toyama1.0/",
@@ -655,6 +693,7 @@ const products = [
     {
         name:"GrAIny for Toyama",
         category:"Application",
+        tab:"",
         desc:"街頭写真ロガー（富山）",
         latest:"Ver 1.0",
         latestUrl:"https://obayashi-smartcity.github.io/GrAInY_Toyama/",
@@ -665,6 +704,7 @@ const products = [
     {
         name:"AREA DASHBOARD",
         category:"Dashboard",
+        tab:"DASHBOARD",
         desc:"客観データによるエリア間比較",
         latest:"Ver 4.2",
         latestUrl:"https://ochosokawa.github.io/AREA_Dashboard2.1/ver.4.2/",
@@ -678,6 +718,7 @@ const products = [
        {
         name:"AREA DASHBOARD for 上本町",
         category:"Dashboard",
+        tab:"DASHBOARD",
         desc:"客観データによるエリア間比較",
         latest:"Ver 4.3",
         latestUrl:"https://ochosokawa.github.io/AREA_Dashboard2.1/ver.4.3/",
@@ -688,6 +729,7 @@ const products = [
     {
         name:"DROPs分析 -感性の価値化-",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROP投稿の分析用ダッシュボード",
         latest:"Ver 2.0",
         latestUrl:"https://ochosokawa.github.io/Analytics_2/",
@@ -701,6 +743,7 @@ const products = [
     {
         name:"DROPs分析 -タグマトリクス-",
         category:"Dashboard",
+        tab:"DROP",
         desc:"DROP常設版のイベント情報アクセスログ分析",
         latest:"Ver 1.0",
         latestUrl:"https://ochosokawa.github.io/DROP_Emotion/Matrix/matrix_act_wb.html",
@@ -711,6 +754,7 @@ const products = [
     {
         name:"Tableau Cloud",
         category:"Dashboard",
+        tab:"ADMIN",
         desc:"Tableauダッシュボード（要認証　DROP、SHOP他機密情報取扱用）",
         latest:"Ver 1.0",
         latestUrl:"https://prod-apnortheast-a.online.tableau.com/#/site/ocscdivision/home",
@@ -721,6 +765,7 @@ const products = [
     {
         name:"Population DASHBOARD",
         category:"Dashboard",
+        tab:"DASHBOARD",
         desc:"人口データ分析（富山用）",
         latest:"Ver 1.0",
         latestUrl:"https://ochosokawa.github.io/Population_comparison/",
@@ -731,6 +776,7 @@ const products = [
     {
         name:"イケフェス2026埋め込みマップ",
         category:"Application",
+        tab:"",
         desc:"Open House Osaka2026提供 埋め込みマップ",
         latest:"Ver 2.1",
         latestUrl:"https://obayashisc.github.io/ikefes_map_A-1/",
@@ -742,6 +788,7 @@ const products = [
        {
         name:"MACHIMEGURI Toyama",
         category:"Website",
+        tab:"",
         desc:"MACHIMEGURI Week Toyama 提供用LP",
         latest:"Ver 1.0",
         latestUrl:"https://ochosokawa.github.io/MACHIMEGURI_TOYAMA/v1.0/",
@@ -752,6 +799,7 @@ const products = [
        {
         name:"簡易スタンプラリー",
         category:"Application",
+        tab:"",
         desc:"屋内回遊イベント提供用 簡易キャッシュ型スタンプラリー",
         latest:"Ver 2.0",
         latestUrl:"https://ochosokawa.github.io/QRstamprally/stamprally.html",
@@ -761,15 +809,17 @@ const products = [
     }
 ];
 
-/* ---------- 描画 ---------- */
-const grid = document.getElementById("grid");
+/* ---------- タブ定義 ---------- */
+const TABS = ["ALL", "DROP", "SHOP", "DASHBOARD", "ADMIN"];
+const tabsOf = p => [].concat(p.tab || []).map(t => String(t).toUpperCase());
+const inTab = (p, tab) => tab === "ALL" || tabsOf(p).includes(tab);
 
-products.forEach(p => {
+/* ---------- カード ---------- */
+function cardHTML(p){
     const archiveLinks = p.archives
         .map(a => `<a href="${a.url}">${a.ver}</a>`)
         .join("");
-
-    grid.innerHTML += `
+    return `
         <div class="card">
             <div class="card-header">
                 <div class="product-name">${p.name}</div>
@@ -786,7 +836,41 @@ products.forEach(p => {
             </div>
         </div>
     `;
+}
+
+/* ---------- 描画 ---------- */
+const grid = document.getElementById("grid");
+const tabBar = document.getElementById("tabs");
+
+tabBar.innerHTML = TABS.map(tab => `
+    <button class="tab" role="tab" data-tab="${tab}">
+        ${tab}<span class="count">${products.filter(p => inTab(p, tab)).length}</span>
+    </button>
+`).join("");
+
+function render(tab){
+    const list = products.filter(p => inTab(p, tab));
+    grid.innerHTML = list.length
+        ? list.map(cardHTML).join("")
+        : `<p class="empty">このカテゴリのプロダクトはまだありません</p>`;
+    tabBar.querySelectorAll(".tab").forEach(b => {
+        const on = b.dataset.tab === tab;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on);
+    });
+}
+
+tabBar.addEventListener("click", e => {
+    const b = e.target.closest(".tab");
+    if(!b) return;
+    const tab = b.dataset.tab;
+    // URL の # にタブを残す（例: .../Portal/#drop）→ リンク共有・再読込でも同じタブ
+    history.replaceState(null, "", tab === "ALL" ? location.pathname + location.search : "#" + tab.toLowerCase());
+    render(tab);
 });
+
+const initialTab = location.hash.slice(1).toUpperCase();
+render(TABS.includes(initialTab) ? initialTab : "ALL");
 
 /* ---------- サマリー ---------- */
 document.getElementById("count-badge").innerHTML =
@@ -794,39 +878,6 @@ document.getElementById("count-badge").innerHTML =
 
 document.getElementById("active-badge").innerHTML =
     `<span class="dot"></span>${products.length} ACTIVE`;
-
-/* ---------- テーマ切り替え ---------- */
-const html = document.documentElement;
-const toggle = document.getElementById("theme-toggle");
-
-// localStorage は環境により使えないことがあるため保護
-function loadTheme(){
-    try {
-        return localStorage.getItem("theme");
-    } catch(e){
-        return null;
-    }
-}
-
-function saveTheme(theme){
-    try {
-        localStorage.setItem("theme", theme);
-    } catch(e){}
-}
-
-function setTheme(theme){
-    html.setAttribute("data-theme", theme);
-    toggle.textContent = theme === "dark" ? "DARK MODE" : "LIGHT MODE";
-}
-
-// 保存済みテーマを復元（初期値はダーク）
-setTheme(loadTheme() || "light");
-
-toggle.addEventListener("click", () => {
-    const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    setTheme(next);
-    saveTheme(next);
-});
 </script>
 </body>
 </html>
